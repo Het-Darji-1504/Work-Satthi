@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#143D32">
+  <meta name="description" content="Your Work Satthi dashboard — manage your profile, bookings, and worker searches.">
+  <title>Dashboard — Work Satthi</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Site navigation">
+      <a class="brand" href="index.html" aria-label="Work Satthi home">
+        <img class="brand-logo" src="logo.svg" alt="">
+        <span class="brand-text">Work <em>Satthi</em></span>
+      </a>
+      <a class="nav-cta" href="index.html">
+        <span>← Home</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- DASHBOARD -->
+  <main class="dashboard-wrap">
+
+    <div class="dashboard-head">
+      <div>
+        <p class="eyebrow">Your Work Satthi space</p>
+        <h1 id="welcome">Your dashboard</h1>
+        <p class="dash-muted" id="role-note">Manage your profile and local connections.</p>
+      </div>
+      <button class="logout-button" id="logout" type="button">Log out</button>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- Profile card -->
+      <section class="dash-card" aria-labelledby="profile-card-heading">
+        <h2 id="profile-card-heading">Your profile</h2>
+        <form id="profile-form" class="dash-form" novalidate>
+          <label>
+            Full name
+            <input name="name" type="text" required maxlength="80" autocomplete="name">
+          </label>
+          <label>
+            Phone number
+            <input name="phone" type="tel" maxlength="20" autocomplete="tel">
+          </label>
+          <label>
+            Local area
+            <input name="area" type="text" maxlength="160" placeholder="e.g. Ahmedabad">
+          </label>
+          <!-- Worker-only fields -->
+          <div id="worker-profile-fields" class="dash-form hidden">
+            <label>
+              Service you offer
+              <select name="service">
+                <option value="">Choose service</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="electrical">Electrical work</option>
+                <option value="cleaning">Home cleaning</option>
+                <option value="cooking">Cooking &amp; daily help</option>
+                <option value="carpentry">Carpentry</option>
+                <option value="painting">Painting</option>
+              </select>
+            </label>
+            <label>
+              Typical rate
+              <input name="rate" type="text" maxlength="100" placeholder="e.g. ₹300 per visit">
+            </label>
+            <label>
+              Experience level
+              <select name="experience">
+                <option value="">Select experience</option><option value="beginner">Less than 1 year</option>
+                <option value="intermediate">1–3 years</option><option value="experienced">3–7 years</option><option value="expert">7+ years</option>
+              </select>
+            </label>
+            <label>
+              Availability
+              <select name="availability">
+                <option value="">Select availability</option><option value="weekdays">Weekdays only</option>
+                <option value="weekends">Weekends only</option><option value="flexible">Flexible</option>
+              </select>
+            </label>
+            <label>
+              Short introduction
+              <textarea name="bio" maxlength="500" placeholder="Describe your skills and experience"></textarea>
+            </label>
+          </div>
+          <button class="dash-button" type="submit">Save profile</button>
+          <p class="dash-message" id="profile-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- Booking request card (customer only) -->
+      <section class="dash-card" id="booking-card" aria-labelledby="booking-card-heading">
+        <h2 id="booking-card-heading">Request a service</h2>
+        <p class="dash-muted">Send a request. A booking remains pending until availability is confirmed.</p>
+        <form id="booking-form" class="dash-form" novalidate>
+          <label>
+            Service
+            <select name="serviceId" required>
+              <option value="">Choose a service</option>
+              <option value="plumbing">Plumbing</option>
+              <option value="electrical">Electrical work</option>
+              <option value="cleaning">Home cleaning</option>
+              <option value="cooking">Cooking &amp; daily help</option>
+              <option value="carpentry">Carpentry</option>
+              <option value="painting">Painting</option>
+            </select>
+          </label>
+          <label>
+            Service address / locality
+            <input name="location" type="text" required maxlength="160" placeholder="Area and address">
+          </label>
+          <label>
+            Preferred date
+            <input name="preferredDate" type="date" required>
+          </label>
+          <label>
+            Preferred time
+            <input name="preferredTime" type="time" required>
+          </label>
+          <label>
+            Phone number
+            <input name="phone" type="tel" required maxlength="20">
+          </label>
+          <label>
+            Job details <span aria-label="optional">(optional)</span>
+            <textarea name="details" maxlength="1000" placeholder="Tell us what needs to be done"></textarea>
+          </label>
+          <button class="dash-button" type="submit">Send booking request</button>
+          <p class="dash-message" id="booking-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- Worker search card (customer only) -->
+      <section class="dash-card" id="workers-card" aria-labelledby="workers-card-heading">
+        <h2 id="workers-card-heading">Find local workers</h2>
+        <form id="worker-search" class="dash-form" novalidate>
+          <label>
+            Service or skill
+            <input name="q" type="text" placeholder="e.g. plumbing, cleaning">
+          </label>
+          <label>
+            Area / locality
+            <input name="area" type="text" placeholder="e.g. Ahmedabad">
+          </label>
+          <button class="dash-button" type="submit">Search workers</button>
+        </form>
+        <div id="worker-results" aria-live="polite" aria-label="Worker search results">
+          <p class="dash-empty">Search for workers who have created a profile.</p>
+        </div>
+      </section>
+
+      <section class="dash-card dashboard-map-card" id="report-issue-card" aria-labelledby="report-issue-heading">
+        <p class="eyebrow">Community issue reporting</p>
+        <h2 id="report-issue-heading">Report a local problem</h2>
+        <p class="dash-muted">Submit a category and location. The report is saved to Supabase and added to the map when location lookup succeeds.</p>
+        <form id="report-issue-form" class="dash-form">
+          <label>Service needed
+            <select name="issueType" required>
+              <option value="">Choose a problem</option>
+              <option value="plumbing">🔧 Plumbing</option>
+              <option value="electrical">⚡ Electrical work</option>
+              <option value="cleaning">🧹 Home cleaning</option>
+              <option value="cooking">🍳 Cooking &amp; daily help</option>
+              <option value="carpentry">🪚 Carpentry</option>
+              <option value="painting">🎨 Painting</option>
+            </select>
+          </label>
+          <label>Short title
+            <input name="title" type="text" required maxlength="120" placeholder="e.g. Large pothole near the bus stop">
+          </label>
+          <label>Exact locality or address
+            <input name="location" type="text" required maxlength="240" placeholder="Area, landmark, city, state">
+          </label>
+          <label>Details
+            <textarea name="description" required maxlength="1200" placeholder="Describe what is wrong and any visible impact"></textarea>
+          </label>
+          <label>Priority
+            <select name="priority" required><option value="normal">Normal</option><option value="high">High — needs prompt attention</option><option value="urgent">Urgent — potential immediate danger</option></select>
+          </label>
+          <button class="dash-button" type="submit">Submit issue report</button>
+          <p class="dash-message" id="issue-report-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="dash-card dashboard-map-card" id="india-map-section" aria-labelledby="india-map-heading">
+        <p class="eyebrow">Explore nearby help</p><h2 id="india-map-heading">Community issue map across India</h2>
+        <p class="dash-muted">Reports submitted by the community appear here with category-specific symbols. Search a location or select a marker to review an issue.</p>
+        <form id="india-map-search" class="dash-form dashboard-map-search"><label for="india-map-location">City or locality</label>
+          <div class="dashboard-map-search-row"><input id="india-map-location" name="location" type="text" placeholder="e.g. Ahmedabad, Gujarat" value="India"><button class="dash-button" type="submit">Find on map</button></div>
+        </form>
+                <div class="issue-map-legend" aria-label="Work Satthi service symbol legend">
+          <span>🔧 Plumbing</span><span>⚡ Electrical work</span><span>🧹 Cleaning</span><span>🍳 Cooking &amp; daily help</span><span>🪚 Carpentry</span><span>🎨 Painting</span>
+        </div>
+<div id="india-map" class="dashboard-india-map" role="region" aria-label="Interactive map of India"></div>
+        <p id="india-map-message" class="dash-message" role="status" aria-live="polite">Search a city to zoom in on the map.</p>
+      </section>
+
+      <!-- Bookings list card (customer only) -->
+      <section class="dash-card" id="bookings-card" aria-labelledby="bookings-card-heading">
+        <h2 id="bookings-card-heading">Your booking requests</h2>
+        <div id="booking-results" aria-live="polite" aria-label="Your bookings">
+          <p class="dash-empty">Loading your requests…</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script>
+    // Load Leaflet map and Supabase libraries before dashboard code.
+    (function () {
+      function loadScript(url) {
+        return new Promise(function (resolve, reject) {
+          var script = document.createElement('script');
+          script.src = url;
+          script.onload = resolve;
+          script.onerror = function () { script.remove(); reject(new Error('Could not load ' + url)); };
+          document.head.appendChild(script);
+        });
+      }
+      loadScript('https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js')
+        .catch(function () { return loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'); })
+        .catch(function () { return; })
+        .then(function () { return loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'); })
+        .catch(function () { return loadScript('https://unpkg.com/@supabase/supabase-js@2'); })
+        .then(function () { return loadScript('supabase-config.js?v=20261024-4'); })
+        .then(function () { return loadScript('dashboard.js?v=20261024-4'); })
+        .catch(function (error) {
+          var message = document.getElementById('profile-message');
+          if (message) {
+            message.textContent = 'Could not load Supabase scripts or configuration. Check your internet connection and that supabase-config.js is deployed in the same folder. Details: ' + error.message;
+            message.classList.add('is-error');
+          }
+        });
+    }());
+  </script>
+</body>
+</html>
